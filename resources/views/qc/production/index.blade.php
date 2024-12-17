@@ -89,7 +89,7 @@
                         <div class="form-group">
                             <label for="partnumber" class="font-weight-bold">Partnumber</label>
                             <input type="text" name="PARTNUMBER" class="form-control" id="partnumber"
-                                placeholder="INPUT PARTNUMBER">
+                                placeholder="INPUT PARTNUMBER" readonly>
                         </div>
                         @error('partnumber')
                             <div class="alert alert-danger">{{ $message }}</div>
@@ -99,7 +99,7 @@
                         <div class="form-group">
                             <label for="item_id" class="font-weight-bold">Item ID</label>
                             <input type="text" name="ITEM_ID" class="form-control" id="item_id"
-                                placeholder="INPUT ITEM ID">
+                                placeholder="INPUT ITEM ID" readonly>
                         </div>
                         @error('item_id')
                             <div class="alert alert-danger">{{ $message }}</div>
@@ -110,7 +110,7 @@
                             <label for="weightOK" class="font-weight-bold">Weight OK</label>
                             <div class="input-group">
                                 <input type="number" name="WEIGHT_OK" class="form-control" id="weightOK"
-                                    placeholder="INPUT WEIGHT OK">
+                                    placeholder="INPUT WEIGHT OK" readonly>
                                 <div class="input-group-append">
                                     <span class="input-group-text">KG</span>
                                 </div>
@@ -125,7 +125,7 @@
                             <label for="qtyOK" class="font-weight-bold">QTY OK</label>
                             <div class="input-group">
                                 <input type="number" name="OK" class="form-control" id="qtyOK"
-                                    placeholder="INPUT QTY OK">
+                                    placeholder="INPUT QTY OK" readonly>
                                 <div class="input-group-append">
                                     <span class="input-group-text">PCS</span>
                                 </div>
@@ -140,7 +140,7 @@
                             <label for="weightReject" class="font-weight-bold">Weight Reject</label>
                             <div class="input-group">
                                 <input type="number" name="WEIGHT_REJECT" class="form-control" id="weightReject"
-                                    placeholder="INPUT WEIGHT REJECT">
+                                    placeholder="INPUT WEIGHT REJECT" readonly>
                                 <div class="input-group-append">
                                     <span class="input-group-text">KG</span>
                                 </div>
@@ -155,7 +155,7 @@
                             <label for="qtyReject" class="font-weight-bold">QTY REJECT</label>
                             <div class="input-group">
                                 <input type="number" name="REJECT" class="form-control" id="qtyReject"
-                                    placeholder="INPUT QTY REJECT">
+                                    placeholder="INPUT QTY REJECT" readonly>
                                 <div class="input-group-append">
                                     <span class="input-group-text">PCS</span>
                                 </div>
@@ -165,6 +165,25 @@
                             <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     </div>
+
+                    {{-- customer and cust id start --}}
+                    <div class="col-md-3" hidden>
+                        <div class="form-group">
+                            <label for="CUSTOMER" class="font-weight-bold">CUSTOMER</label>
+                            <input type="text" name="CUSTOMER" class="form-control" id="CUSTOMER"
+                                placeholder="INPUT ITEM ID">
+                        </div>
+                    </div>
+                    <div class="col-md-3" hidden>
+                        <div class="form-group">
+                            <label for="CUST_ID" class="font-weight-bold">CUST_ID</label>
+                            <input type="text" name="CUST_ID" class="form-control" id="CUST_ID"
+                                placeholder="INPUT ITEM ID">
+                        </div>
+                    </div>
+                    {{-- customer and cust id end --}}
+
+
                     <div class="col-md-1 d-flex align-items-center justify-content-end">
                         <button class="btn btn-warning" type="button" id="submitForm">Create</button>
                     </div>
@@ -276,22 +295,48 @@
                     $('#formTitle').text(`Input Produksi Section ${section}`);
 
                     $('#inputProduction').show();
-                    $('#inputProduction1').hide();
+                    $('#inputProduction1').show();
 
-                    // Tampilkan form sesuai section yang dipilih
                     if (section == 1) {
-                        $('#inputProduction1').show();
-                        $('#qtyOK').prop('readonly', true);
-                        $('#qtyReject').prop('readonly', true);
-                        $('#weightOK').prop('readonly', false);
-                        $('#weightReject').prop('readonly', false);
+                        $('#WO_NUMBER').on('keydown', function(e) {
+                            if (e.key === 'Enter') {
+                                $('#partnumber').focus();
+                                $('#partnumber').prop('readonly', false);
+                            }
+                        });
+                        $('#partnumber').on('keydown', function(e) {
+                            if (e.key === 'Enter') {
+                                $('#weightOK').focus();
+                                $('#weightOK').prop('readonly', false);
+                            }
+                        });
+                        $('#weightOK').on('keydown', function(e) {
+                            if (e.key === 'Enter') {
+                                $('#weightReject').focus();
+                                $('#weightReject').prop('readonly', false);
+                            }
+                        });
 
                     } else if (section == 2) {
-                        $('#inputProduction1').show();
-                        $('#weightOK').prop('readonly', true);
-                        $('#weightReject').prop('readonly', true);
-                        $('#qtyOK').prop('readonly', false);
-                        $('#qtyReject').prop('readonly', false);
+                        $('#WO_NUMBER').on('keydown', function(e) {
+                            if (e.key === 'Enter') {
+                                $('#partnumber').focus();
+                                $('#partnumber').prop('readonly', false);
+                            }
+                        });
+                        $('#partnumber').on('keydown', function(e) {
+                            if (e.key === 'Enter') {
+                                $('#qtyOK').focus();
+                                $('#qtyOK').prop('readonly', false);
+                            }
+                        });
+
+                        $('#qtyOK').on('keydown', function(e) {
+                            if (e.key === 'Enter') {
+                                $('#qtyReject').focus();
+                                $('#qtyReject').prop('readonly', false);
+                            }
+                        });
                     }
                 } else {
                     // Jika ada input yang kosong, sembunyikan semua
@@ -307,6 +352,7 @@
             });
 
             updateForm();
+
 
             // menghitung qty OK dan qty Reject pada section 1
             $('#weightOK').on('input', function() {
@@ -356,7 +402,7 @@
                                 // radionya isinya partnumber dan item_id
                                 $('#dataCF tbody').append(`
                                     <tr>
-                                        <td><input type="radio" name="item_id" value="${item.PARTNUMBER}|${item.ITEM_ID}"></td>
+                                        <td><input type="radio" name="item_id" value="${item.PARTNUMBER}|${item.ITEM_ID}|${item.CUSTOMER}|${item.CUST_ID}"></td>
                                         <td>${item.ITEM_ID}</td>
                                         <td>${item.PARTNUMBER}</td>
                                         <td>${item.PARTNAME}</td>
@@ -387,6 +433,8 @@
                 const item = $(this).find('input[type="radio"]').val().split('|');
                 $('#partnumber').val(item[0]);
                 $('#item_id').val(item[1]);
+                $('#CUSTOMER').val(item[2]);
+                $('#CUST_ID').val(item[3]);
                 // $('#dataCF tbody').empty();
             });
 
@@ -404,6 +452,8 @@
                     OK: $('#qtyOK').val(),
                     WEIGHT_REJECT: $('#weightReject').val(),
                     REJECT: $('#qtyReject').val(),
+                    CUSTOMER: $('#CUSTOMER').val(),
+                    CUST_ID: $('#CUST_ID').val(),
                 };
 
                 // console.log(formData);// Menampilkan data yang akan dikirimkan

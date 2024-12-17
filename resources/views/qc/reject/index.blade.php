@@ -7,7 +7,7 @@
             <a href="{{ route('qc.menu') }}" class="btn btn-primary">
                 <i class="fa-solid fa-arrow-left"></i>
             </a>
-            <a href="" class="btn btn-primary">
+            <a href="{{route('rejects.create')}}" class="btn btn-primary">
                 <i class="fa-solid fa-plus"></i>
                 Add Data
             </a>
@@ -25,32 +25,39 @@
                     <th>PARTNUMBER</th>
                     <th>TYPE</th>
                     <th>CUSTOMER</th>
-                    <th>QTY</th>
+                    <th>WEIGHT(KG)</th>
                     <th>SECTION</th>
                     <th>DETAIL</th>
                     <th>ACTION</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>2022-01-01</td>
-                    <td>123456</td>
-                    <td>ABC123</td>
-                    <td>TYPE A</td>
-                    <td>CUSTOMER A</td>
-                    <td>10</td>
-                    <td>SECTION 1</td>
-                    <td>DETAIL</td>
-                    <td>
-                        <a href="" class="btn btn-warning">
-                            <i class="fa-solid fa-pen"></i>
-                        </a>
-                        <a href="" class="btn btn-danger">
-                            <i class="fa-solid fa-trash"></i>
-                        </a>
-                    </td>
-                </tr>
+                @foreach ($rejects as $reject )
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{$reject->created_at->format('d-m-Y')}}</td>
+                        <td>{{ $reject->ITEM_ID }}</td>
+                        <td>{{ $reject->PARTNUMBER }}</td>
+                        <td>{{ $reject->TYPE }}</td>
+                        <td>{{ $reject->CUSTOMER}}</td>
+                        <td>{{ number_format($reject->QTY, 3) }}</td>
+                        <td>{{ $reject->SECTION }}</td>
+                        <td>{{ $reject->DETAIL }}</td>
+                        <td>
+                            <a href="{{ route('rejects.edit', $reject->id) }}" class="btn btn-warning">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                            <form action="{{ route('rejects.destroy', $reject->id) }}" method="post" class="d-inline">
+                                @csrf
+                                @method('delete')
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+
+                @endforeach
             </tbody>
         </table>
     </div>

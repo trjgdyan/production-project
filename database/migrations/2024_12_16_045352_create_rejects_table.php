@@ -13,20 +13,20 @@ return new class extends Migration
     {
         Schema::create('rejects', function (Blueprint $table) {
             $table->id();
-            $table->string('NO_PROUKSI');
-            $table->string('WO_NUMBER');
-            $table->string('ITEM_ID');
-            $table->string('PARTNUMBER');
-            $table->string('TYPE');
-            $table->string('CUSTOMER');
-            $table->string('CUST_ID');
-            $table->float('QTY');
-            $table->float('WEIGHT');
-            $table->string('SECTION');
-            $table->string('DETAIL');
-            $table->string('OPR_NAME');
-            $table->integer('SHIFT');
-            $table->string('UPDATED_BY');
+            $table->string('NO_REJECT');
+            $table->string('WO_NUMBER')->nullable();
+            $table->string('ITEM_ID')->nullable();
+            $table->string('PARTNUMBER')->nullable();
+            $table->string('TYPE')->nullable();
+            $table->string('CUSTOMER')->nullable();
+            $table->string('CUST_ID')->nullable();
+            $table->float('QTY')->nullable();
+            $table->float('WEIGHT')->nullable();
+            $table->string('SECTION')->nullable();
+            $table->string('DETAIL')->nullable();
+            $table->string('OPR_NAME')->nullable();
+            $table->integer('SHIFT')->nullable();
+            $table->string('UPDATED_BY')->nullable();
             $table->timestamps();
         });
     }

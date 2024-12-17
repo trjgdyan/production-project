@@ -2,8 +2,12 @@
 
 @section('title', 'Add Reject Data')
 @section('content')
+    <a href="{{ route('rejects.index') }}" class="btn btn-primary">
+        <i class="fa-solid fa-arrow-left"></i>
+    </a>
     <div class="container">
         {{-- <div class="card"> --}}
+
         <form id="RejectForm">
             @csrf
             {{-- PILIH SECTION, SHIFT, TANGGAL --}}
@@ -160,6 +164,27 @@
                         @enderror
                     </div>
 
+                    {{-- CUSTOMER AND CUSTID, PARTNAME START --}}
+
+                    <div class="form-group">
+                        <input type="text" name="CUSTOMER" id="CUSTOMER" class="form-control"
+                            placeholder="CUSTOMER" hidden>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" name="CUST_ID" id="CUST_ID" class="form-control" placeholder="CUST ID"
+                            hidden>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" name="PARTNAME" id="PARTNAME" class="form-control" hidden>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" name="TYPE" id="TYPE" class="form-control" hidden>
+                    </div>
+                    {{-- CUSTOMER, PARTNAME AND CUSTID END --}}
+
 
                     <div class="col-md-1 d-flex align-items-center justify-content-end">
                         <button class="btn btn-warning" type="button" id="submitForm">Create</button>
@@ -268,7 +293,8 @@
             updateForm();
 
             $('#PARTNUMBER').on('input', function() {
-                var partnumber = $(this).val();
+                var partnumber = $('#PARTNUMBER').val();
+                var section = $('#section').val();
                 if (partnumber.length > 0) {
                     $.ajax({
                         url: "{{ route('fetchData.searchDataReject') }}",
@@ -277,7 +303,8 @@
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         },
                         data: {
-                            partnumber: partnumber
+                            partnumber: partnumber,
+                            section: section
                         },
                         success: function(response) {
                             console.log(response);
@@ -298,10 +325,10 @@
 
                                 if (section == 1) {
                                     radioValue =
-                                        `${item.PARTNUMBER}|${item.ITEM_ID}|${item.WEIGHT_REJECT}|${item.WO_NUMBER}|${item.SHIFT}`;
+                                        `${item.PARTNUMBER}|${item.ITEM_ID}|${item.WEIGHT_REJECT}|${item.WO_NUMBER}|${item.SHIFT}|${item.CUSTOMER}|${item.CUST_ID}|${item.PARTNAME}|${item.TYPE}`;
                                 } else {
                                     radioValue =
-                                        `${item.PARTNUMBER}|${item.ITEM_ID}|${item.REJECT}|${item.WO_NUMBER}|${item.SHIFT}`;
+                                        `${item.PARTNUMBER}|${item.ITEM_ID}|${item.REJECT}|${item.WO_NUMBER}|${item.SHIFT}|${item.CUSTOMER}|${item.CUST_ID}|${item.PARTNAME}|${item.TYPE}`;
                                 }
 
                                 $('#dataReject tbody').append(`
@@ -332,6 +359,10 @@
                 $('#MAX_PCS').val(data[2]);
                 $('#WO_NUMBER').val(data[3]);
                 $('#SHIFT').val(data[4]);
+                $('#CUSTOMER').val(data[5]);
+                $('#CUST_ID').val(data[6]);
+                $('#PARTNAME').val(data[7]);
+                $('#TYPE').val(data[8]);
             });
 
 
@@ -361,28 +392,36 @@
                     SHIFT: $('#SHIFT').val(),
                     DETAIL_REJECT: $('#DETAIL_REJECT').val(),
                     NO_MESIN: $('#NO_MESIN').val(),
+                    CUSTOMER: $('#CUSTOMER').val(),
+                    CUST_ID: $('#CUST_ID').val(),
+                    TYPE: $('#TYPE').val(),
+
                 };
 
                 // console.log(formData);// Menampilkan data yang akan dikirimkan
 
+                let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
                 $.ajax({
-                    url: "{{ route('productions.store') }}",
+                    url: "{{ route('rejects.store') }}",
                     method: 'POST',
                     headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        // 'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        'X-CSRF-TOKEN': token
                     },
                     contentType: 'application/json',
                     data: JSON.stringify(formData),
                     success: function(response) {
                         alert('Data berhasil disimpan');
                         console.log(response);
-                        $('#productionForm').trigger('reset');
+                        $('#RejectForm').trigger('reset');
                         updateForm();
                     },
                     error: function(error) {
-                        alert('Data gagal disimpan');
                         console.log(error.responseText);
+                        alert('Terjadi kesalahan: ' + error.responseJSON.message);
                     }
+
                 });
             });
 

@@ -9,4 +9,6 @@ class Reject extends Model
 {
     /** @use HasFactory<\Database\Factories\RejectFactory> */
     use HasFactory;
+
+    protected $guarded = [];
 }
