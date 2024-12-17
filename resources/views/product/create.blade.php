@@ -16,25 +16,85 @@
                     @error('NAME')
                         <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
+
+                    <div class="form-group">
+                        <label for="ITEM_ID">ITEM_ID</label>
+                        <input type="text" name="ITEM_ID" id="ITEM_ID" class="form-control">
+                    </div>
+                    @error('ITEM_ID')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="PARTNUMBER">PARTNUMBER</label>
+                            <input type="text" name="PARTNUMBER" id="PARTNUMBER" class="form-control">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="PARTNAME">PARTNAME</label>
+                            <input type="text" name="PARTNAME" id="PARTNAME" class="form-control">
+                        </div>
+                    </div>
+                    @error('PARTNUMBER')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                    @error('PARTNAME')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+
                     <div class="form-group">
                         <label for="TYPE">TYPE</label>
                         <select name="TYPE" id="TYPE" class="form-control">
                             <option value="">SELECT TYPE</option>
-                            <option value="RAW MATERIAL">RAW MATERIAL</option>
-                            <option value="SEMI-FINISHED GOODS">SEMI-FINISHED GOODS</option>
-                            <option value="FINISHED GOODS">FINISHED GOODS</option>
+                            <option value="TYP111">TYP111</option>
+                            <option value="TYP212">TYP212</option>
+                            <option value="TYP313">TYP313</option>
+                            <option value="TYP414">TYP414</option>
+                            <option value="TYP515">TYP515</option>
                         </select>
                     </div>
                     @error('TYPE')
                         <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
-                    <div class="form-group">
-                        <label for="KATEGORI">KATEGORI</label>
-                        <input type="text" name="KATEGORI" id="KATEGORI" class="form-control">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="CUSTOMER">CUSTOMER</label>
+                            <input type="text" name="CUSTOMER" id="CUSTOMER" class="form-control">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="CUST_ID">CUST_ID</label>
+                            <input type="text" name="CUST_ID" id="CUST_ID" class="form-control">
+                        </div>
                     </div>
-                    @error('KATEGORI')
+                    @error('CUSTOMER')
                         <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
+                    @error('CUST_ID')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="ISI">ISI</label>
+                            <input type="number" name="ISI" id="ISI" class="form-control">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="SATUAN">SATUAN</label>
+                            <select name="SATUAN" id="SATUAN" class="form-control">
+                                <option value="">SELECT SATUAN</option>
+                                <option value="PCS">PCS</option>
+                                <option value="UNIT">UNIT</option>
+                            </select>
+                        </div>
+                    </div>
+                    @error('ISI')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                    @error('SATUAN')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+
                     <div class="form-group">
                         <label for="SIZE">SIZE (Panjang x Lebar x Tinggi)</label>
                         <div class="d-flex">
@@ -55,24 +115,7 @@
                     @error('SIZE_HEIGHT')
                         <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
-                    <div class="form-group">
-                        <label for="ISI">ISI</label>
-                        <input type="text" name="ISI" id="ISI" class="form-control">
-                    </div>
-                    @error('ISI')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                    @enderror
-                    <div class="form-group">
-                        <label for="SATUAN">SATUAN</label>
-                        <select name="SATUAN" id="SATUAN" class="form-control">
-                            <option value="">SELECT SATUAN</option>
-                            <option value="PCS">PCS</option>
-                            <option value="UNIT">UNIT</option>
-                        </select>
-                    </div>
-                    @error('SATUAN')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                    @enderror
+
                     <div class="form-group">
                         <label for="HARGA">HARGA</label>
                         <input type="number" name="HARGA" id="HARGA" class="form-control">
@@ -80,37 +123,15 @@
                     @error('HARGA')
                         <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
+
                     <div class="form-group">
-                        <label for="BOM">BOM</label>
-                        <input type="text" name="BOM" id="BOM" class="form-control">
+                        <label for="STATUS">STATUS</label>
+                        <input type="text" name="STATUS" id="STATUS" class="form-control">
                     </div>
-                    @error('BOM')
+                    @error('STATUS')
                         <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
-                    <div class="form-group">
-                        <label for="MESIN">MESIN</label>
-                        <select name="MESIN" id="MESIN" class="form-control">
-                            <option value="">SELECT MESIN</option>
-                            @for ($i = 1; $i <= 10; $i++)
-                                <option value="MESIN {{ $i }}">MESIN {{ $i }}</option>
-                            @endfor
-                        </select>
-                    </div>
-                    @error('MESIN')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                    @enderror
-                    <div class="form-group">
-                        <label for="WARNA">WARNA</label>
-                        <select name="WARNA" id="WARNA" class="form-control">
-                            <option value="">SELECT WARNA</option>
-                            <option value="BLUE">BLUE</option>
-                            <option value="BLACK">BLACK</option>
-                            <option value="GREY">GREY</option>
-                        </select>
-                    </div>
-                    @error('WARNA')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                    @enderror
+
 
                     <div class="form-group d-flex">
                         <a href="{{ route('product.index') }}" class="btn btn-danger">Back</a>

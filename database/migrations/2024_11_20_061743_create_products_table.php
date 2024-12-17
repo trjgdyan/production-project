@@ -13,16 +13,17 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('NAME');
+            $table->string('NAME')->nullable();
+            $table->string('ITEM_ID')->nullable();
+            $table->string('PARTNUMBER')->nullable();
+            $table->string('PARTNAME')->nullable();
             $table->string('TYPE')->nullable();
-            $table->string('KATEGORI')->nullable();
-            $table->string('SIZE')->nullable();
-            $table->string('ISI')->nullable();
+            $table->string('CUSTOMER')->nullable();
+            $table->string('CUST_ID')->nullable();
             $table->string('SATUAN')->nullable();
+            $table->integer('ISI')->nullable();
+            $table->string('SIZE')->nullable();
             $table->decimal('HARGA', 10, 2)->nullable();
-            $table->text('BOM')->nullable();
-            $table->string('MESIN')->nullable();
-            $table->string('WARNA')->nullable();
             $table->string('STATUS')->nullable();
             $table->timestamp('CREATED_DATE')->useCurrent()->nullable();
             $table->string('CREATED_BY')->nullable();

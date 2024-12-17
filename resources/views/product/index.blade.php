@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="container">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center mb-3">
             <a href="{{ route('product.create') }}" class="btn btn-primary d-flex justify-content-center align-items-center">
                 <i class="fa-solid fa-plus" style="font-size: 1.8em; margin-right:0.5rem;"></i>Tambah Product
             </a>
@@ -16,33 +16,16 @@
             </div>
         @endif
 
-        <div class="d-flex justify-content-between align-items-center mt-3 mb-3">
-            <div class="d-flex align-items-center">
-                <label for="entries" class="mr-2">Show</label>
-                <select id="entries" class="form-control w-auto h-2">
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                </select>
-                <span class="ml-2">entries</span>
-            </div>
-
-            <form action="" method="get" class="form-inline">
-                <input type="text" name="search" id="search" class="form-control" placeholder="Search">
-                <button style="background-color: transparent; border:none;"><i class="fas fa-search"
-                        style="font-size: 2em;"></i></button>
-            </form>
-        </div>
-
-        <table class="table table-striped table-bordered w-100">
+        <table id="dataProduct" class="table table-striped table-bordered w-100">
             <thead class="thead-dark">
                 <tr class="text-center font-weight-bold">
-                    <td>PRODID</td>
+                    <td>NO</td>
                     <td>NAME</td>
                     <td>TYPE</td>
-                    <td>KATEGORI</td>
-                    <td>BOM</td>
+                    <td>PARTNUMBER</td>
+                    <td>ITEM ID</td>
+                    <td>CUSTOMER</td>
+                    <td>ISI</td>
                     <td>ACTION</td>
                 </tr>
             </thead>
@@ -59,9 +42,17 @@
                             {{ $product->TYPE }}
                         </td>
                         <td>
-                            {{ $product->KATEGORI }}
+                            {{ $product->PARTNUMBER }}
                         </td>
-                        <td>{{ $product->BOM }}</td>
+                        <td>
+                            {{ $product->ITEM_ID }}
+                        </td>
+                        <td>
+                            {{ $product->CUSTOMER }}
+                        </td>
+                        <td>
+                            {{ $product->ISI }}
+                        </td>
                         <td>
                             <a href="{{ route('product.show', $product->id) }}" class="btn btn-info"><i
                                     class="fa-solid fa-eye fa-lg"></i></a>
@@ -79,26 +70,19 @@
                 @endforeach
             </tbody>
         </table>
-
-        {{-- Pagination --}}
-        <div class="d-flex justify-content-between align-items-center">
-            {{-- <div>
-                <p>Showing {{ $users->count() }} of {{ $users->total() }} entries</p>
-            </div>
-            <div>
-                {{ $users->links() }}
-            </div> --}}
-
-            {{-- <p>Showing 1 to 10 of 57 entries</p> --}}
-
-
-        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
         $(document).ready(function() {
+            $('#dataProduct').DataTable({
+                paging: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                responsive: true
+            });
             setTimeout(function() {
                 $('#flash-message').fadeOut('slow', function() {
                     $(this).remove(); // Menghapus elemen setelah animasi selesai

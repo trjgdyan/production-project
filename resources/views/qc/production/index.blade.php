@@ -170,39 +170,69 @@
                     </div>
                 </div>
         </form>
+
+        <table id="dataCF" class="display table table-bordered ">
+            <thead class="bg-primary">
+                <th class="text-white text-center">SELECT</th>
+                <th class="text-white text-center">ITEM ID</th>
+                <th class="text-white text-center">PARTNUMBER</th>
+                <th class="text-white text-center">PARTNAME</th>
+                <th class="text-white text-center">CUSTOMER NAME</th>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
     </div>
 
     <div class="d-flex justify-content-between align-items-center mt-3 bg-primary">
         <h5 class="text-white p-1">Data Hasil Produksi</h5>
     </div>
-    <table class="table table-striped table-bordered w-100">
-        <thead class="thead-dark">
-            <tr class="text-center font-weight-bold">
-                <td>NO</td>
-                <td>WO NUMBER</td>
-                <td>PARTNUMBER</td>
-                <td>ITEM ID</td>
-                <td>SHIFT</td>
-                <td>SECTION</td>
-                <td>QTY GOOD</td>
-                <td>QTY REJECT</td>
-                <td>CREATED BY</td>
-                <td>LAST UPDATED</td>
+    <table id="myTable" class="display table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>NO</th>
+                <th>WO NUMBER</th>
+                <th>PARTNUMBER</th>
+                {{-- <th>ITEM ID</th> --}}
+                <th>SHIFT</th>
+                <th>SECTION</th>
+                <th>QTY GOOD</th>
+                <th>QTY REJECT</th>
+                <th>CREATED BY</th>
+                <th>LAST UPDATED</th>
+                <th>ACTION</th>
             </tr>
         </thead>
         <tbody id="dataProduction">
             @foreach ($productions as $production)
-                <tr class="text-center">
+                <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $production->WO_NUMBER }}</td>
                     <td>{{ $production->PARTNUMBER }}</td>
-                    <td>{{ $production->ITEM_ID }}</td>
+                    {{-- <td>{{ $production->ITEM_ID }}</td> --}}
                     <td>{{ $production->SHIFT }}</td>
                     <td>{{ $production->SECTION }}</td>
                     <td>{{ $production->OK }}</td>
                     <td>{{ $production->REJECT }}</td>
                     <td>{{ $production->CREATED_BY }}</td>
                     <td>{{ $production->LAST_UPDATE }}</td>
+                    <td>
+                        <div class="d-flex justify-content-center">
+                            <a href="" class="btn btn-warning mr-2">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                            <form action="{{ route('productions.destroy', $production->NO_PRODUKSI) }}" method="post"
+                                class="d-inline">
+                                @csrf
+                                @method('delete')
+                                <button class="btn btn-danger" type="submit"
+                                    onclick="return confirm('Apakah Anda yakin ingin menghapus data dengan WO NUMBER : {{ $production->WO_NUMBER }}?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
                 </tr>
             @endforeach
         </tbody>
@@ -210,9 +240,28 @@
 
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+            let table = $('#myTable').DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true,
+                "responsive": true,
+            });
+
+            let tableCF = $('#dataCF').DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true,
+                "responsive": true,
+            });
+
             $('#toggleInputProduction').click(function() {
                 $('#inputProductionSection').toggle();
             });
@@ -285,6 +334,63 @@
                 $('#weightReject').val(weightReject.toFixed(2));
             });
 
+            // select berdasarkan partnumber
+            $('#partnumber').on('input', function() {
+                var partnumber = $(this).val();
+                if (partnumber.length > 0) {
+                    $.ajax({
+                        url: "{{ route('fetchData.searchDataCF') }}",
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+
+                        data: {
+                            partnumber: partnumber
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            $('#dataCF tbody').empty();
+
+                            response.forEach(function(item) {
+                                // radionya isinya partnumber dan item_id
+                                $('#dataCF tbody').append(`
+                                    <tr>
+                                        <td><input type="radio" name="item_id" value="${item.PARTNUMBER}|${item.ITEM_ID}"></td>
+                                        <td>${item.ITEM_ID}</td>
+                                        <td>${item.PARTNUMBER}</td>
+                                        <td>${item.PARTNAME}</td>
+                                        <td>${item.CUSTOMER}</td>
+                                    </tr>
+                                `);
+                            });
+
+                            if (response.length === 0) {
+                                $('#dataCF tbody').append(`
+                                    <tr>
+                                        <td colspan="5" class="text-center">No data found</td>
+                                    </tr>
+                                `);
+                            }
+                        },
+                        error: function(error) {
+                            console.log(error.responseText);
+                        }
+                    });
+                } else {
+                    $('#dataCF tbody').empty();
+                }
+            });
+
+            $('#dataCF tbody').on('click', 'tr', function() {
+                $(this).find('input[type="radio"]').prop('checked', true);
+                const item = $(this).find('input[type="radio"]').val().split('|');
+                $('#partnumber').val(item[0]);
+                $('#item_id').val(item[1]);
+                // $('#dataCF tbody').empty();
+            });
+
+
             // submit form
             $('#submitForm').click(function() {
                 const formData = {
@@ -325,22 +431,38 @@
 
         });
 
-        function reloadTable() {
-            $.ajax({
-                url: "{{ route('productions.dataTable') }}", // Ganti dengan rute yang menghasilkan HTML tabel
-                method: 'GET',
-                success: function(response) {
-                    console.log("Berhasil memuat tabel: ", response);
-                    $('#dataProduction').empty();
-                    $('#dataProduction').html(response);
-                },
-                error: function(error) {
-                    console.log("Gagal memuat tabel: ", error);
-                }
-            });
-        }
+        // function reloadTable() {
+        //     $.ajax({
+        //         url: "{{ route('fetchData.production') }}", // Ganti dengan rute yang menghasilkan HTML tabel
+        //         method: 'GET',
+        //         success: function(response) {
+        //             console.log("Berhasil memuat tabel: ", response);
+        //             $('#dataProduction').empty();
+        //             let tableRows = response.map((data, index) => {
+        //                 return `
+    //                             <tr class="text-center">
+    //                                 <td>${index + 1}</td>
+    //                                 <td>${data.WO_NUMBER}</td>
+    //                                 <td>${data.PARTNUMBER}</td>
+    //                                 <td>${data.ITEM_ID}</td>
+    //                                 <td>${data.SHIFT}</td>
+    //                                 <td>${data.SECTION}</td>
+    //                                 <td>${data.OK}</td>
+    //                                 <td>${data.REJECT}</td>
+    //                                 <td>${data.CREATED_BY}</td>
+    //                                 <td>${data.LAST_UPDATE}</td>
+    //                             </tr>
+    //                         `;
+        //             });
+        //             $('#dataProduction').append(tableRows);
+        //         },
+        //         error: function(error) {
+        //             console.log("Gagal memuat tabel: ", error);
+        //         }
+        //     });
+        // }
 
-        setInterval(reloadTable, 3000);
+        // setInterval(reloadTable, 3000);
 
         $(document).ready(function() {
             setTimeout(function() {
@@ -350,5 +472,7 @@
             }, 3000);
         });
     </script>
+
+
 
 @endsection

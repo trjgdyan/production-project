@@ -2,6 +2,16 @@
 @section('title', 'Data Reject')
 @section('content')
     <div class="shadow-sm p-3 mb-3 bg-white rounded">
+        <div class="d-flex justify-content-between align-items-center">
+            {{-- button back --}}
+            <a href="{{ route('qc.menu') }}" class="btn btn-primary">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
+            <a href="" class="btn btn-primary">
+                <i class="fa-solid fa-plus"></i>
+                Add Data
+            </a>
+        </div>
         <div class="d-flex justify-content-between align-items-center mt-3 bg-primary">
             <h5 class="text-white p-1">REJECT DATA LIST</h5>
             <a href="" class="mr-2"><i class="fa-solid fa-cloud-arrow-down fa-2xl" style="color: #FFD43B;"></i></a>
@@ -33,7 +43,7 @@
                     <td>SECTION 1</td>
                     <td>DETAIL</td>
                     <td>
-                        <a href="" class="btn btn-primary">
+                        <a href="" class="btn btn-warning">
                             <i class="fa-solid fa-pen"></i>
                         </a>
                         <a href="" class="btn btn-danger">
@@ -45,9 +55,8 @@
         </table>
     </div>
 
-    {{-- <script>
+    <script>
         $(document).ready(function() {
-            console.log('DataTables is loading...');
             $('#rejectDataList').DataTable({
                 paging: true,
                 searching: true,
@@ -56,6 +65,6 @@
                 responsive: true
             });
         });
-    </script> --}}
+    </script>
 
 @endsection

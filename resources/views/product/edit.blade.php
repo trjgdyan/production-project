@@ -10,6 +10,7 @@
                 <form action="{{ route('product.update', $product->id) }}" method="post">
                     @csrf
                     @method('PUT')
+
                     <div class="form-group">
                         <label for="NAME">NAME</label>
                         <input type="text" name="NAME" id="NAME" class="form-control"
@@ -18,18 +19,49 @@
                     @error('NAME')
                         <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
+
+                    <div class="form-group">
+                        <label for="ITEM_ID">ITEM_ID</label>
+                        <input type="text" name="ITEM_ID" id="ITEM_ID" class="form-control"
+                            value="{{ old('ITEM_ID', $product->ITEM_ID) }}">
+                    </div>
+                    @error('ITEM_ID')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+
+                    <div class="form-group">
+                        <label for="PARTNUMBER">PARTNUMBER</label>
+                        <input type="text" name="PARTNUMBER" id="PARTNUMBER" class="form-control"
+                            value="{{ old('PARTNUMBER', $product->PARTNUMBER) }}">
+                    </div>
+                    @error('PARTNUMBER')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+
+                    <div class="form-group">
+                        <label for="PARTNAME">PARTNAME</label>
+                        <input type="text" name="PARTNAME" id="PARTNAME" class="form-control"
+                            value="{{ old('PARTNAME', $product->PARTNAME) }}">
+                    </div>
+                    @error('PARTNAME')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+
                     <div class="form-group">
                         <label for="TYPE">TYPE</label>
                         <select name="TYPE" id="TYPE" class="form-control">
                             <option value="">SELECT TYPE</option>
-                            <option value="RAW MATERIAL"
-                                {{ old('TYPE', $product->TYPE) == 'RAW MATERIAL' ? 'selected' : '' }}>RAW MATERIAL</option>
-                            <option value="SEMI-FINISHED GOODS"
-                                {{ old('TYPE', $product->TYPE) == 'SEMI-FINISHED GOODS' ? 'selected' : '' }}>SEMI-FINISHED
-                                GOODS</option>
-                            <option value="FINISHED GOODS"
-                                {{ old('TYPE', $product->TYPE) == 'FINISHED GOODS' ? 'selected' : '' }}>FINISHED GOODS
+                            <option value="TYP111"{{ old('TYPE', $product->TYPE) == 'TYP111' ? 'selected' : '' }}>TYP111
                             </option>
+                            <option value="TYP212"{{ old('TYPE', $product->TYPE) == 'TYP212' ? 'selected' : '' }}>TYP212
+                            </option>
+                            <option value="TYP313"{{ old('TYPE', $product->TYPE) == 'TYP313' ? 'selected' : '' }}>TYP313
+                            </option>
+                            <option value="TYP414"{{ old('TYPE', $product->TYPE) == 'TYP414' ? 'selected' : '' }}>TYP414
+                            </option>
+                            <option value="TYP515"{{ old('TYPE', $product->TYPE) == 'TYP515' ? 'selected' : '' }}>TYP515
+                            </option>
+
                         </select>
                     </div>
                     @error('TYPE')
@@ -37,11 +69,42 @@
                     @enderror
 
                     <div class="form-group">
-                        <label for="KATEGORI">KATEGORI</label>
-                        <input type="text" name="KATEGORI" id="KATEGORI" class="form-control"
-                            value="{{ old('KATEGORI', $product->KATEGORI) }}">
+                        <label for="CUSTOMER">CUSTOMER</label>
+                        <input type="text" name="CUSTOMER" id="CUSTOMER" class="form-control"
+                            value="{{ old('CUSTOMER', $product->CUSTOMER) }}">
                     </div>
-                    @error('KATEGORI')
+                    @error('CUSTOMER')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+
+                    <div class="form-group">
+                        <label for="CUST_ID">CUST_ID</label>
+                        <input type="text" name="CUST_ID" id="CUST_ID" class="form-control"
+                            value="{{ old('CUST_ID', $product->CUST_ID) }}">
+                    </div>
+                    @error('CUST_ID')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+
+                    <div class="form-group">
+                        <label for="SATUAN">SATUAN</label>
+                        <select name="SATUAN" id="SATUAN" class="form-control">
+                            <option value="PCS" {{ old('SATUAN', $product->SATUAN) == 'PCS' ? 'selected' : '' }}>PCS
+                            </option>
+                            <option value="UNIT" {{ old('SATUAN', $product->SATUAN) == 'UNIT' ? 'selected' : '' }}>UNIT
+                            </option>
+                        </select>
+                    </div>
+                    @error('SATUAN')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+
+                    <div class="form-group">
+                        <label for="ISI">ISI</label>
+                        <input type="number" name="ISI" id="ISI" class="form-control"
+                            value="{{ old('ISI', $product->ISI) }}">
+                    </div>
+                    @error('ISI')
                         <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
 
@@ -67,24 +130,6 @@
                     @enderror
 
                     <div class="form-group">
-                        <label for="ISI">ISI</label>
-                        <input type="number" name="ISI" id="ISI" class="form-control"
-                            value="{{ old('ISI', $product->ISI) }}">
-                    </div>
-                    @error('ISI')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                    @enderror
-
-                    <div class="form-group">
-                        <label for="SATUAN">SATUAN</label>
-                        <input type="text" name="SATUAN" id="SATUAN" class="form-control"
-                            value="{{ old('SATUAN', $product->SATUAN) }}">
-                    </div>
-                    @error('SATUAN')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                    @enderror
-
-                    <div class="form-group">
                         <label for="HARGA">HARGA</label>
                         <input type="number" name="HARGA" id="HARGA" class="form-control"
                             value="{{ old('HARGA', $product->HARGA) }}">
@@ -94,42 +139,11 @@
                     @enderror
 
                     <div class="form-group">
-                        <label for="BOM">BOM</label>
-                        <input type="text" name="BOM" id="BOM" class="form-control"
-                            value="{{ old('BOM', $product->BOM) }}">
+                        <label for="STATUS">STATUS</label>
+                        <input type="text" name="STATUS" id="STATUS" class="form-control"
+                            value="{{ old('STATUS', $product->STATUS) }}">
                     </div>
-                    @error('BOM')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                    @enderror
-
-                    <div class="form-group">
-                        <label for="MESIN">MESIN</label>
-                        <select name="MESIN" id="MESIN" class="form-control">
-                            <option value="">SELECT MESIN</option>
-                            @for ($i = 1; $i <= 10; $i++)
-                                <option value="MESIN {{ $i }}"
-                                    {{ old('MESIN', $product->MESIN) == "MESIN $i" ? 'selected' : '' }}>MESIN
-                                    {{ $i }}</option>
-                            @endfor
-                        </select>
-                    </div>
-                    @error('MESIN')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                    @enderror
-
-                    <div class="form-group">
-                        <label for="WARNA">WARNA</label>
-                        <select name="WARNA" id="WARNA" class="form-control">
-                            <option value="">SELECT WARNA</option>
-                            <option value="BLUE" {{ old('WARNA', $product->WARNA) == 'BLUE' ? 'selected' : '' }}>BLUE
-                            </option>
-                            <option value="BLACK" {{ old('WARNA', $product->WARNA) == 'BLACK' ? 'selected' : '' }}>BLACK
-                            </option>
-                            <option value="GREY" {{ old('WARNA', $product->WARNA) == 'GREY' ? 'selected' : '' }}>GREY
-                            </option>
-                        </select>
-                    </div>
-                    @error('WARNA')
+                    @error('STATUS')
                         <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
 

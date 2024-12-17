@@ -20,11 +20,6 @@ class ProductionController extends Controller
         return view('qc.production.index', compact('productions'));
     }
 
-    public function dataTable()
-    {
-        return response()->json('data');
-    }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -122,6 +117,8 @@ class ProductionController extends Controller
      */
     public function destroy(Production $production)
     {
-        //
+        $production = Production::findOrFail($production->NO_PRODUKSI);
+        $production->delete();
+        return redirect()->route('productions.index')->with('success', 'Data berhasil dihapus');
     }
 }
