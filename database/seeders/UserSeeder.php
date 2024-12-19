@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
     {
         User::create([
             'noreg' => '123456',
-            'name' => 'Admin',
+            'name' => 'Tri Jagad Ariyani',
             'class' => '1',
             'department' => 'IT',
             'password' => bcrypt('password'),

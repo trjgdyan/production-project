@@ -21,8 +21,8 @@
                             <label for="section" class="font-weight-bold">Section</label>
                             <select class="form-control" name="SECTION" id="section">
                                 <option value="">Pilih Section</option>
-                                <option value="1">Section 1</option>
-                                <option value="2">Section 2</option>
+                                <option value="RAW MATERIAL">RAW MATERIAL</option>
+                                <option value="FINISH GOOD">FINISH GOOD</option>
                             </select>
                         </div>
                         @error('section')
@@ -76,7 +76,7 @@
                     <div class="col-md-2">
                         <div class="form-group">
                             <label for="PCS" class="font-weight-bold">PCS</label>
-                            <input type="number" name="PCS" class="form-control" id="PCS" placeholder="INPUT PCS"
+                            <input type="float" name="PCS" class="form-control" id="PCS" placeholder="INPUT PCS"
                                 readonly>
                         </div>
                         @error('PCS')
@@ -85,7 +85,7 @@
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
-                            <label for="MAX_PCS" class="font-weight-bold">MAX_PCS</label>
+                            <label for="MAX_PCS" class="font-weight-bold">MAX_QTY</label>
                             <input type="number" name="MAX_PCS" class="form-control" id="MAX_PCS"
                                 placeholder="INPUT MAX_PCS">
                         </div>
@@ -96,11 +96,11 @@
 
                     <div class="col-md-2">
                         <div class="form-group">
-                            <label for="QTY" class="font-weight-bold">QTY</label>
+                            <label for="QTY" class="font-weight-bold">WEIGHT</label>
                             <div class="input-group">
                                 <input type="number" name="QTY" class="form-control" id="QTY" placeholder="QTY"
                                     readonly>
-                                <div class="input-group-append">
+                                <div class="input-group-append" id="indicator">
                                     <span class="input-group-text">KG</span>
                                 </div>
                             </div>
@@ -245,8 +245,8 @@
                     var detailReject = $('#DETAIL_REJECT');
 
                     var option = {
-                        1: ['Bahan Exp', 'Kurang Air', 'Serat Kurang'],
-                        2: ['Salah Cetak', 'Pecah', 'Melepuh/Gosong', 'Lecet'],
+                        'RAW MATERIAL': ['Bahan Exp', 'Kurang Air', 'Serat Kurang'],
+                        'FINISH GOOD': ['Salah Cetak', 'Pecah', 'Melepuh/Gosong', 'Lecet'],
                     }
 
                     function updateOption() {
@@ -261,7 +261,7 @@
                     }
 
                     // Tampilkan form sesuai section yang dipilih
-                    if (section == 1) {
+                    if (section == 'RAW MATERIAL') {
                         $('#inputReject1').show();
                         $('#dataReject').show();
                         $('#QTY').prop('readonly', false);
@@ -269,7 +269,7 @@
                         $('#inputNoMesin').prop('hidden', true);
                         updateOption();
 
-                    } else if (section == 2) {
+                    } else if (section == 'FINISH GOOD') {
                         $('#inputReject1').show();
                         $('#dataReject').show();
                         $('#PCS').prop('readonly', false);
@@ -323,7 +323,7 @@
                             response.forEach(function(item) {
                                 let radioValue;
 
-                                if (section == 1) {
+                                if (section == 'RAW MATERIAL') {
                                     radioValue =
                                         `${item.PARTNUMBER}|${item.ITEM_ID}|${item.WEIGHT_REJECT}|${item.WO_NUMBER}|${item.SHIFT}|${item.CUSTOMER}|${item.CUST_ID}|${item.PARTNAME}|${item.TYPE}`;
                                 } else {
@@ -368,14 +368,52 @@
 
             $('#QTY').on('input', function() {
                 const qty = $(this).val();
-                const pcs = qty / 2.5;
+                const pcs = qty * 2.5;
                 $('#PCS').val(pcs.toFixed(2));
             });
 
             $('#PCS').on('input', function() {
                 const pcs = $(this).val();
-                const qty = pcs * 2.5;
-                $('#QTY').val(qty.toFixed(2));
+                const qty = pcs / 2.5;
+                $('#QTY').val(qty.toFixed(0));
+            });
+
+            // indicator pcs yang diinputkan untuk section 1
+            $('#QTY').on('input', function() {
+                const qty = $(this).val();
+                const max_qty = $('#MAX_PCS').val();
+                if (qty > max_qty) {
+                    $('#indicator').html(
+                        '<span class="input-group-text" style="background-color: #F44336; color: white;">KG</span>'
+                    );
+                } else if (qty < max_qty) {
+                    $('#indicator').html(
+                        '<span class="input-group-text" style="background-color: #2196F3; color: white;">KG</span>'
+                    );
+                } else if (qty == max_qty) {
+                    $('#indicator').html(
+                        '<span class="input-group-text" style="background-color: #4CAF50; color: white;">KG</span>'
+                    );
+                }
+            });
+
+            // indicator pcs yang diinputkan untuk section 2
+            $('#PCS').on('input', function() {
+                const pcs = $(this).val();
+                const max_pcs = $('#MAX_PCS').val();
+                if (pcs > max_pcs) {
+                    $('#indicator').html(
+                        '<span class="input-group-text" style="background-color: #F44336; color: white;">KG</span>'
+                    );
+                } else if (pcs < max_pcs) {
+                    $('#indicator').html(
+                        '<span class="input-group-text" style="background-color: #2196F3; color: white;">KG</span>'
+                    );
+                } else if (pcs == max_pcs) {
+                    $('#indicator').html(
+                        '<span class="input-group-text" style="background-color: #4CAF50; color: white;">KG</span>'
+                    );
+                }
             });
 
 

@@ -88,6 +88,8 @@
             </div>
         </div>
 
+
+
         {{-- GRAFIK CHART 1 --}}
         <div class="shadow-sm p-3 mb-3 bg-white rounded" id="CHART1" style="display: none;">
             <div class="d-flex justify-content-center align-items-center mt-3">
@@ -140,8 +142,8 @@
                         <label for="section" class="font-weight-bold">Section</label>
                         <select class="form-control" id="section">
                             <option value="" disabled selected>SELECT SECTION</option>
-                            <option value="1">Section 1</option>
-                            <option value="2">Section 2</option>
+                            <option value="RAW MATERIAL">RAW MATERIAL</option>
+                            <option value="FINISH GOOD">FINISH GOOD</option>
                         </select>
                     </div>
                     @error('sectiom')
@@ -176,11 +178,18 @@
             </div>
         </div>
 
+        {{-- header --}}
+        <div class="d-flex justify-content-between align-items-center mt-3 bg-primary">
+            <h5 class="text-white p-1">REJECT DATA LIST</h5>
+            <a href="" id="exportData" class="mr-2"><i class="fa-solid fa-cloud-arrow-down fa-2xl"
+                    style="color: #FFD43B;"></i></a>
+        </div>
+
         {{-- TABLE --}}
         <table id="dataTableReject" class="table table-bordered table-hover overflow-auto">
             <thead class="bg-primary">
                 <tr>
-                    <th class="text-center text-white">NO</th>
+                    <th class="text-center text-white">NO REJECT</th>
                     <th class="text-center text-white">TANGGAL</th>
                     <th class="text-center text-white">ITEM ID</th>
                     <th class="text-center text-white">PARTNUMBER</th>
@@ -188,7 +197,7 @@
                     <th class="text-center text-white">CUSTOMER</th>
                     <th class="text-center text-white">QTY</th>
                     <th class="text-center text-white">DETAIL</th>
-                    <th class="text-center text-white">ACTION</th>
+                    {{-- <th class="text-center text-white">ACTION</th> --}}
                 </tr>
             </thead>
 
@@ -258,7 +267,7 @@
                             response.forEach(function(item) {
                                 $('#dataTableReject tbody').append(`
                                     <tr>
-                                        <td class="text-center">${item.id}</td>
+                                        <td class="text-center">${item.NO_REJECT}</td>
                                         <td class="text-center">${formatDate(item.created_at)}</td>
                                         <td class="text-center">${item.ITEM_ID}</td>
                                         <td class="text-center">${item.PARTNUMBER}</td>
@@ -266,9 +275,7 @@
                                         <td class="text-center">${item.CUSTOMER}</td>
                                         <td class="text-center">${item.WEIGHT}</td>
                                         <td class="text-center">${item.DETAIL}</td>
-                                        <td class="text-center">
-                                            <button class="btn btn-danger deleteBtn" data-id="${item.id}">Delete</button>
-                                        </td>
+
                                     </tr>
                                 `);
                             });
@@ -672,6 +679,55 @@
                 });
 
             });
+
+            // event handler button export data
+            $('#exportData').click(function(e) {
+                e.preventDefault(); // Mencegah reload halaman
+
+                let section = $('#section').val();
+                let start_date = $('#start_date').val();
+                let end_date = $('#end_date').val();
+
+                if (section && start_date && end_date) {
+                    $.ajax({
+                        url: '{{ route('fetchData.exportDataReject') }}',
+                        type: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data: {
+                            section: section,
+                            start_date: start_date,
+                            end_date: end_date
+                        },
+                        xhrFields: {
+                            responseType: 'blob' // Mengatur tipe respons untuk menangani file
+                        },
+                        success: function(blob) {
+                            // Membuat elemen <a> untuk mengunduh file
+                            const url = window.URL.createObjectURL(blob);
+                            const link = document.createElement('a');
+                            link.href = url;
+                            link.download = 'data_reject.csv';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            window.URL.revokeObjectURL(
+                                url);
+                        },
+                        error: function(error) {
+                            console.error(error.responseText);
+                            alert('Error: ' + (error.responseJSON?.message ||
+                                'An error occurred.'));
+                        }
+                    });
+                } else {
+                    alert('Lengkapi Data sebelum Export');
+                }
+            });
+
+
+
 
 
         });

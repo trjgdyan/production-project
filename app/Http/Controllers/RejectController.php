@@ -113,6 +113,8 @@ class RejectController extends Controller
      */
     public function destroy(Reject $reject)
     {
-        //
+        $reject = Reject::findOrFail($reject->NO_REJECT);
+        $reject->delete();
+        return redirect()->route('rejects.index')->with('success', 'Reject deleted successfully.');
     }
 }

@@ -81,8 +81,10 @@
                 searching: true,
                 ordering: true,
                 info: true,
-                responsive: true
+                responsive: true,
+                scrollX: true 
             });
+
             setTimeout(function() {
                 $('#flash-message').fadeOut('slow', function() {
                     $(this).remove(); // Menghapus elemen setelah animasi selesai

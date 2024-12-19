@@ -13,37 +13,15 @@
                     </a>
                 </div>
                 <div class="w-100 text-center border td-hover bg-primary p-3">
-                    <a href="#" id="openModal" class="d-flex align-items-center justify-content-center text-white"
+                    <a href="{{ route('product.index') }}"
+                        class="d-flex align-items-center justify-content-center text-white"
                         style="font-weight: bold; text-decoration: none;">
-                        <i class="fas fa-folder mr-3" style="font-size: 3em;"></i>MODULE SELECTION
+                        <i class="fas fa-folder mr-3" style="font-size: 3em;"></i>PRODUCT
                     </a>
                 </div>
             </div>
         </div>
     </div>
-
-    <div id="modalSelection" class="modal-container">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Module Selection</h5>
-                <button type="button" class="close" id="closeModal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <ul class="list-group">
-                    <a href="{{ route('product.index') }}">
-                        <li class="list-group-item">Produksi</li>
-                    </a>
-                    <a href="{{ route('qc.menu') }}">
-                        <li class="list-group-item">QC</li>
-                    </a>
-                </ul>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="closeModalButton">Close</button>
-            </div>
-        </div>
-    </div>
-
     <style>
         .td-hover:hover {
             background-color: #4a6fad !important;

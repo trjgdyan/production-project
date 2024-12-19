@@ -9,6 +9,22 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+
+    public function superadmin(){
+        return $this->class === 1;
+    }
+
+    public function admin(){
+        return $this->class === 2;
+    }
+
+    public function user(){
+        return $this->class === 3;
+    }
+
+
+
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 

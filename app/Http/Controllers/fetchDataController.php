@@ -9,6 +9,7 @@ use App\Models\Production;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use SebastianBergmann\CodeCoverage\Report\Xml\Totals;
+use Illuminate\Support\Facades\Response;
 
 class fetchDataController extends Controller
 {
@@ -204,9 +205,6 @@ class fetchDataController extends Controller
         // Ambil data teratas (tanggal dengan produksi terbesar)
         $topProduction = $result5->sortByDesc('total_produksi')->first();  // Mengambil data teratas
 
-
-
-
         return response()->json([
             'chart1' => [
                 'total_reject' => $totalReject,
@@ -246,5 +244,51 @@ class fetchDataController extends Controller
                 'data' => $result5,
             ],
         ]);
+    }
+
+    public function exportDataReject(Request $request)
+    {
+        $searchSection = $request->input('section');
+        $searchStartDate = $request->input('start_date') . ' 00:00:00';
+        $searchEndDate = $request->input('end_date') . ' 23:59:59';
+
+        $results = Reject::where('SECTION', '=', $searchSection)
+            ->whereBetween('created_at', [$searchStartDate, $searchEndDate])
+            ->get();
+
+        // Membuat file CSV
+        $filename = 'data_reject.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"$filename\"",
+        ];
+
+        // Menulis data ke dalam CSV
+        $callback = function () use ($results) {
+            $file = fopen('php://output', 'w');
+            // Header CSV
+            fputcsv($file, ['WO_NUMBER', 'ITEM_ID', 'PARTNUMBER', 'TYPE', 'CUSTOMER', 'QTY', 'SECTION', 'DETAIL', 'SHIFT', 'created_at']);
+
+            // Isi data
+            foreach ($results as $row) {
+                fputcsv($file, [
+                    $row->WO_NUMBER,
+                    $row->ITEM_ID,
+                    $row->PARTNUMBER,
+                    $row->TYPE,
+                    $row->CUSTOMER,
+                    $row->QTY,
+                    $row->SECTION,
+                    $row->DETAIL,
+                    $row->SHIFT,
+                    $row->created_at,
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        // Mengembalikan file CSV sebagai respons
+        return Response::stream($callback, 200, $headers);
     }
 }

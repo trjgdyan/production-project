@@ -11,4 +11,6 @@ class Reject extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    protected $primaryKey = 'NO_REJECT';
 }

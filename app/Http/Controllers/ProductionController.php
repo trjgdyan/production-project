@@ -101,7 +101,8 @@ class ProductionController extends Controller
      */
     public function edit(Production $production)
     {
-        //
+        $production = Production::findOrFail($production->NO_PRODUKSI);
+        return view('qc.production.edit', compact('production'));
     }
 
     /**
@@ -109,7 +110,32 @@ class ProductionController extends Controller
      */
     public function update(Request $request, Production $production)
     {
-        //
+        $validated = $request->validate([
+            'ITEM_ID' => 'nullable|string|max:255',
+            'TANGGAL' => 'nullable|date',
+            'SHIFT' => 'nullable|integer',
+            'PARTNUMBER' => 'nullable|string|max:255',
+            'LOT' => 'nullable|integer',
+            'CUST_ID' => 'nullable|string|max:255',
+            'ORDER_ID' => 'nullable|string|max:255',
+            'OK' => 'nullable|numeric',
+            'REJECT' => 'nullable|numeric',
+            'WEIGHT_OK' => 'nullable|numeric',
+            'WEIGHT_REJECT' => 'nullable|numeric',
+            'STATUS' => 'nullable|string|max:255',
+            'SECTION' => 'nullable|string|max:255',
+            'WO_NUMBER' => 'nullable|string|max:255',
+            'CREATED_DATE' => 'nullable|date',
+            'LAST_UPDATE' => 'nullable|date',
+            'CREATED_BY' => 'nullable|string|max:255',
+            'UPDATED_BY' => 'nullable|string|max:255',
+        ]);
+
+        $production = Production::findOrFail($production->NO_PRODUKSI);
+        $production->update($validated);
+
+        return response()->json(['success' => 'Data berhasil diupadate']);
+        return redirect()->route('productions.index')->with('success', 'Data berhasil diubah');
     }
 
     /**

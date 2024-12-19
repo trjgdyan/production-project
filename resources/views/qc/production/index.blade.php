@@ -33,8 +33,8 @@
                             <label for="section" class="font-weight-bold">Section</label>
                             <select class="form-control" name="SECTION" id="section">
                                 <option value="">Pilih Section</option>
-                                <option value="1">Section 1</option>
-                                <option value="2">Section 2</option>
+                                <option value="RAW MATERIAL">RAW MATERIAL</option>
+                                <option value="FINISH GOOD">FINISH GOOD</option>
                             </select>
                         </div>
                         @error('section')
@@ -235,10 +235,13 @@
                     <td>{{ $production->OK }}</td>
                     <td>{{ $production->REJECT }}</td>
                     <td>{{ $production->CREATED_BY }}</td>
-                    <td>{{ $production->LAST_UPDATE }}</td>
+                    {{-- <td>{{ $production->LAST_UPDATE->format('d-m-Y') }}</td> --}}
+                    <td>{{ $production->LAST_UPDATE ? \Carbon\Carbon::parse($production->LAST_UPDATE)->format('d-m-Y') : '-' }}
+                    </td>
+
                     <td>
                         <div class="d-flex justify-content-center">
-                            <a href="" class="btn btn-warning mr-2">
+                            <a href="{{route('productions.edit', $production->NO_PRODUKSI)}}" class="btn btn-warning mr-2">
                                 <i class="fas fa-pen"></i>
                             </a>
                             <form action="{{ route('productions.destroy', $production->NO_PRODUKSI) }}" method="post"
@@ -269,6 +272,7 @@
                 "info": true,
                 "autoWidth": true,
                 "responsive": true,
+                "scrollX": true,
             });
 
             let tableCF = $('#dataCF').DataTable({
@@ -292,12 +296,15 @@
 
                 if (section && tanggal && shift) {
                     // Update judul dengan section yang dipilih
+                    // JIKA 1 maka RAW MATERIAL, JIKA 2 maka FINISH GOOD
+                    // $('#formTitle').text(`Input Produksi Section ${section == 1 ? 'RAW MATERIAL' : 'FINISH GOOD'}`);
+
                     $('#formTitle').text(`Input Produksi Section ${section}`);
 
                     $('#inputProduction').show();
                     $('#inputProduction1').show();
 
-                    if (section == 1) {
+                    if (section == "RAW MATERIAL") {
                         $('#WO_NUMBER').on('keydown', function(e) {
                             if (e.key === 'Enter') {
                                 $('#partnumber').focus();
@@ -317,7 +324,7 @@
                             }
                         });
 
-                    } else if (section == 2) {
+                    } else if (section == "FINISH GOOD") {
                         $('#WO_NUMBER').on('keydown', function(e) {
                             if (e.key === 'Enter') {
                                 $('#partnumber').focus();
